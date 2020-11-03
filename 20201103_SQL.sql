@@ -1,43 +1,54 @@
+--unicodb.emp 불러오기
 SELECT * 
 FROM unicodb.emp;
 
+--unicodb.emp에서 입사일이 빠른 순서대로 정렬
 SELECT * 
 FROM unicodb.emp
 ORDER BY hiredate;
 
+--unicodb.emp에서 부서번호가 30인 직원들만 출력
 SELECT * 
 FROM unicodb.emp
 WHERE deptno = 30;
 
+--unicodb.emp에서 부서번호별로 급여의 종합 출력
 SELECT deptno, SUM(sal) 
 FROM unicodb.emp
 GROUP BY deptno;
 
+--unicodb.emp에서 부서번호별 급여의 총합 출력(부서번호가 NULL 제외)
 SELECT deptno, SUM(sal) 
 FROM unicodb.emp
 WHERE deptno IS NOT null
 GROUP BY deptno;
 
-
+--unicodb.emp에서 ename과 sal만 출력하는데 급여가 높은 순(ORDER BY sal DESC)으로 출력
+--DESC : 내림차순
+--ASC : 오름차순
 SELECT ename, sal 
 FROM unicodb.emp
 ORDER BY sal DESC;
 
-
+--unicodb.emp에서 rank() over (ORDER BY sal DESC)와 sal을 출력하는데
+--rank() over (ORDER BY sal DESC)는 급여(sal)가 높은 순서대로 순위를 정해줌(단, 동률 데이터가 있을 시 중복된 순위가 정해지고 순서대로 번호가 정해짐)
 SELECT rank() over (ORDER BY sal DESC), sal
 FROM unicodb.emp;
 
+--동률 데이터가  있을 시 중복된 순위가 정해지고 다음 숫자로 넘어감
 SELECT dense_rank() over (ORDER BY sal DESC), sal
 FROM unicodb.emp;
 
+--급여가 높은 순으로 번호 지정
 SELECT row_number() over (ORDER BY sal DESC), sal
 FROM unicodb.emp;
-					
 
+--unicodb.emp에서 부서별로 나눈다음에 그 안에서 급여가 높은 순서대로 순위를 정한다
 SELECT rank() over (partition by deptno ORDER BY sal DESC), sal, deptno
 FROM unicodb.emp;
 
-
+--unicodb.emp에서 ename과 sal, grade를 출력한다
+--grade는 급여별로 조건(CASE WHEN sal BETWEEN 4000 AND 5000 THEN 'A'__sal이 4000에서 5000사이면(4000,5000포함) 'A' ..)을 정해 등급을 지정한다.
 SELECT ename, sal, CASE WHEN sal BETWEEN 4000 AND 5000 THEN 'A'
 		WHEN sal BETWEEN 3000 AND 3999 THEN 'B'
 		WHEN sal BETWEEN 2000 AND 2999 THEN 'C'
@@ -46,11 +57,13 @@ SELECT ename, sal, CASE WHEN sal BETWEEN 4000 AND 5000 THEN 'A'
 FROM unicodb.emp;	
 
 
+--테이블명에 DB명 생략 가능.
 USE edudb;
 
+--edudb.dataset4 전체 출력
 SELECT * FROM dataset4;
 
-
+--edudb.dataset4 데이터 중 위에서 10개만 출력
 SELECT *
 FROM dataset4 LIMIT 10;
 
