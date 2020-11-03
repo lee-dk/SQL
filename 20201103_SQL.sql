@@ -67,21 +67,22 @@ SELECT * FROM dataset4;
 SELECT *
 FROM dataset4 LIMIT 10;
 
-
+--dataset4에서 PASSENGERID를 카운트 해주고, 죽복된 값이 있는지 확인해준다
 SELECT COUNT(PASSENGERID) N_PASSENGERS,
 COUNT(DISTINCT PASSENGERID) N_D_PASSENGERS
 FROM dataset4;
 
-
+--성별에따른 승객 수와 생존자 수를 파악
 -- [그림 8-4 결과]
 SELECT SEX,
 COUNT(PASSENGERID) N_PASSENGERS,
 SUM(SURVIVED) N_SURVIVED
 FROM dataset4
 GROUP
-BY 1
+BY 1 --그냥 SEX(컬럼명)을 주고 처리하는게 더 좋음
 ;
 
+--성별에 따른 탐승객 수와 생존자 수의 비율을 구한다
 -- [그림 8-5 결과]
 SELECT SEX,
 COUNT(PASSENGERID) N_PASSENGERS,
@@ -92,12 +93,14 @@ GROUP
 BY 1
 ;
 
+--연령(10세 단위로 분류)에따른 생존율
 -- [그림 8-6 결과]
 SELECT FLOOR(AGE/10)*10 AGEBAND,
 AGE
 FROM dataset4
 ;
 
+--연령별로 탑승객 수 와 생존자 수, 생존율
 -- [그림 8-7 결과]
 SELECT FLOOR(AGE/10)*10 AGEBAND,
 COUNT(PASSENGERID) N_PASSENGERS,
@@ -108,6 +111,7 @@ GROUP
 BY 1
 ;
 
+--위에서 나온 결과를 연령 순으로 정렬
 -- [그림 8-8 결과]
 SELECT FLOOR(AGE/10)*10 AGEBAND,
 COUNT(PASSENGERID) N_PASSENGERS,
@@ -120,6 +124,7 @@ ORDER
 BY 1
 ;
 
+--연령에 성별을 추가해서 세부적인 생존율 파악(여성-남성 순서)
 -- [그림 8-9 결과]
 SELECT FLOOR(AGE/10)*10 AGEBAND,
 SEX,
@@ -133,6 +138,7 @@ ORDER
 BY 2,1
 ;
 
+--연령에 성별을 추가해서 세부적인 생존율 파악(남성만 출력)
 -- [그림 8-10 결과]
 SELECT FLOOR(AGE/10)*10 AGEBAND,
 SEX,
@@ -145,6 +151,7 @@ BY 1,2
 HAVING SEX = 'male'
 ;
 
+--연령에 성별을 추가해서 세부적인 생존율 파악(여성만 출력)
 -- [그림 8-11 결과]
 SELECT FLOOR(AGE/10)*10 AGEBAND,
 SEX,
@@ -157,6 +164,7 @@ BY 1,2
 HAVING SEX = 'female'
 ;
 
+--남성 생존율과 여성생존율을 조인하여 성별과 동일 연령대별로 생존율 차이를 비교
 -- [그림 8-12 결과]
 SELECT A.AGEBAND,
 A.SURVIVED_RATE MALE_SURVIVED_RATE,
@@ -188,11 +196,14 @@ ORDER
 BY A.AGEBAND
 ;
 
+
+--객실 등급 출력
 -- [그림 8-14]
 SELECT DISTINCT PCLASS
 FROM dataset4
 ;
 
+--객실 등급 별로 승객 수와 생존자 수, 생존율을 계산
 -- [그림 8-16 결과]
 SELECT PCLASS,
 COUNT(PASSENGERID) N_PASSENGERS,
@@ -205,6 +216,7 @@ ORDER
 BY 1
 ;
 
+--객실 등급 별로 성별을 조합해 승객 수와 생존자 수, 생존율을 계산
 -- [그림 8-17 결과]
 SELECT PCLASS,
 SEX,
@@ -218,6 +230,7 @@ ORDER
 BY 2,1
 ;
 
+--객실 등급 별로 성별과 연령대를 조합해 승객 수와 생존자 수, 생존율을 계산
 -- [그림 8-18 결과]
 SELECT PCLASS,
 SEX,
